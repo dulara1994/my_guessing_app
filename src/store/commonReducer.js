@@ -9,7 +9,7 @@ import {
 
 const initialState = {
   loading: false,
-  temperature: 0,
+  temperature: "",
   previousReadings: [],
 };
 

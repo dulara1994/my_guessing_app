@@ -14,6 +14,11 @@ const MainPageWrapper = styled.div`
   justify-content: center;
   align-items: center;
 
+  .marks-collector {
+    display: flex;
+    flex-direction: column;
+  }
+
   .mainbox {
     /* max-width: 500px; */
     border: 2px solid black;
@@ -45,6 +50,21 @@ const MainPageWrapper = styled.div`
     width: 80%;
     border-top: 1px solid black;
     margin-top: 50px;
+    display: flex;
+
+    .marks-collector {
+      margin: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      &.correct-reading {
+        color: green;
+      }
+      &.false-reading {
+        color: red;
+      }
+    }
   }
 `;
 
@@ -93,6 +113,28 @@ const MainLayout = () => {
       });
   }, []);
 
+  // lets manipulete won here
+  let win_count = 0;
+  previousReadings.forEach((reading) => {
+    if (reading.correct) {
+      win_count += 1;
+    }
+  });
+
+  if (attempts_left === 0) {
+    // prevent accidential rerendering
+    if (win_count >= 3) {
+      if (won !== "yes") {
+        setWon("yes");
+      }
+    } else {
+      if (won !== "lost") {
+        setWon("lost");
+      }
+    }
+  }
+  console.log(6666, win_count);
+
   return (
     <MainPageWrapper>
       <div className="body">
@@ -122,8 +164,18 @@ const MainLayout = () => {
                 // if value is correct
                 console.log(99999, data, parseFloat(temp));
                 if (data <= floatTemp + 5 && data >= floatTemp - 5) {
-                  setWon("won");
-                  return alert(`You guessed it The correct value is  ${data}`);
+                  // setWon("won");
+                  dispatch(
+                    setOldReadings([
+                      ...previousReadings,
+                      {
+                        temp,
+                        was: cityTemp,
+                        correct: true,
+                      },
+                    ])
+                  );
+                  // return alert(`You guessed it The correct value is  ${data}`);
                 } else {
                   dispatch(
                     setOldReadings([
@@ -131,6 +183,7 @@ const MainLayout = () => {
                       {
                         temp,
                         was: cityTemp,
+                        correct: false,
                       },
                     ])
                   );
@@ -142,6 +195,7 @@ const MainLayout = () => {
                 id="input"
                 placeholder="Your guess text box"
                 value={temp}
+                required
                 onChange={(e) => {
                   setTemp(e.target.value);
                 }}
@@ -156,7 +210,11 @@ const MainLayout = () => {
       <div className="footer">
         {previousReadings.map((reading) => {
           return (
-            <div>
+            <div
+              className={`marks-collector ${
+                reading.correct ? "correct-reading" : "false-reading"
+              }`}
+            >
               <div className="guess">{reading.temp} </div>
               <div className="actual"> Was {reading.was}</div>
             </div>
