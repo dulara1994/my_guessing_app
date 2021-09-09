@@ -12,6 +12,9 @@ const MainPageWrapper = styled.div`
   .mainbox {
     max-width: 500px;
   }
+
+  .guess {
+  }
 `;
 
 const cities = [
@@ -31,6 +34,7 @@ const MainLayout = () => {
 
   const [temp, setTemp] = useState(0);
   const [city, setcity] = useState("");
+  const [cityTemp, setcityTemp] = useState(0);
 
   useEffect(() => {
     const selected_city = cities[Math.floor(Math.random() * cities.length)];
@@ -40,12 +44,11 @@ const MainLayout = () => {
         `http://api.openweathermap.org/data/2.5/weather?q=${selected_city.city_id}&appid=${api_key}`
       )
       .then(function (response) {
-        // handle success
         let temperature;
         try {
           temperature = response.data.main.temp;
+          setcityTemp(temperature);
           dispatch(tempAction(temperature));
-
           console.log(temperature);
         } catch (e) {
           console.log(e);
@@ -75,7 +78,15 @@ const MainLayout = () => {
               if (data <= floatTemp + 5 && data >= floatTemp - 5) {
                 return alert(`You guessed it The correct value is  ${data}`);
               } else {
-                dispatch(setOldReadings([...previousReadings, temp]));
+                dispatch(
+                  setOldReadings([
+                    ...previousReadings,
+                    {
+                      temp,
+                      was: cityTemp,
+                    },
+                  ])
+                );
               }
             }}
           >
@@ -92,9 +103,14 @@ const MainLayout = () => {
         </div>
       </div>
       <div className="footer">
-        {previousReadings.map((reading) => (
-          <span>{reading} ,</span>
-        ))}
+        {previousReadings.map((reading) => {
+          return (
+            <div>
+              <div className="guess">{reading.temp} </div>
+              <div className="actual"> Was {reading.was}</div>
+            </div>
+          );
+        })}
       </div>
     </MainPageWrapper>
   );
