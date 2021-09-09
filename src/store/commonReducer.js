@@ -1,9 +1,16 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { START_LOADING, END_LOADING, TEST } from "../constants/common-constant";
+import {
+  START_LOADING,
+  END_LOADING,
+  // TEST,
+  TEMPERATURE,
+  PREVIOUSREADINGS,
+} from "../constants/common-constant";
 
 const initialState = {
   loading: false,
-  testdata: "initial data",
+  temperature: 0,
+  previousReadings: [],
 };
 
 export default (state = initialState, action) => {
@@ -18,11 +25,16 @@ export default (state = initialState, action) => {
         ...state,
         loading: false,
       };
-
-    case TEST:
+    case PREVIOUSREADINGS:
       return {
         ...state,
-        testdata: action.payload,
+        previousReadings: action.payload,
+      };
+
+    case TEMPERATURE:
+      return {
+        ...state,
+        temperature: action.payload,
       };
 
     default:
