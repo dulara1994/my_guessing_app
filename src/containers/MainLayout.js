@@ -8,9 +8,28 @@ import { tempAction, setOldReadings } from "../actions/common.actions";
 
 const MainPageWrapper = styled.div`
   background-color: #d0e2f2;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
   .mainbox {
-    max-width: 500px;
+    /* max-width: 500px; */
+    border: 2px solid black;
+    border-radius: 33px;
+    padding: 50px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    input#input {
+      background-color: transparent;
+      padding: 10px;
+    }
   }
 
   .guess {
@@ -64,7 +83,7 @@ const MainLayout = () => {
       <div className="body">
         <div className="mainbox">
           Main area box
-          {data}
+          {/* {data} */}
           <h2 className="city_name">{city.city_name}</h2>
           <form
             onSubmit={(e) => {
@@ -93,11 +112,13 @@ const MainLayout = () => {
             <input
               type="number"
               id="input"
+              placeholder="Your guess text box"
               value={temp}
               onChange={(e) => {
                 setTemp(e.target.value);
               }}
             />
+            <br />
             <button> Check </button>
           </form>
         </div>
