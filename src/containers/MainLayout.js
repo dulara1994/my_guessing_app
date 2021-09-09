@@ -30,9 +30,21 @@ const MainPageWrapper = styled.div`
       background-color: transparent;
       padding: 10px;
     }
+
+    button {
+      background: transparent;
+      padding: 5px;
+      border-radius: 5px;
+    }
   }
 
   .guess {
+  }
+
+  .footer {
+    width: 80%;
+    border-top: 1px solid black;
+    margin-top: 50px;
   }
 `;
 
@@ -49,11 +61,14 @@ const MainLayout = () => {
   const data = useSelector(({ common }) => common.temperature);
   const previousReadings = useSelector(({ common }) => common.previousReadings);
 
+  const attempts_left = 5 - previousReadings.length;
+
   const api_key = process.env.REACT_APP_WEATHER_API_KEY;
 
   const [temp, setTemp] = useState(0);
   const [city, setcity] = useState("");
   const [cityTemp, setcityTemp] = useState(0);
+  const [won, setWon] = useState("no");
 
   useEffect(() => {
     const selected_city = cities[Math.floor(Math.random() * cities.length)];
@@ -81,47 +96,62 @@ const MainLayout = () => {
   return (
     <MainPageWrapper>
       <div className="body">
-        <div className="mainbox">
-          Main area box
-          {/* {data} */}
-          <h2 className="city_name">{city.city_name}</h2>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
+        {won === "yes" && (
+          <div className="mainbox">
+            <h2>Congratulations! You Won</h2>
+          </div>
+        )}
+        {won === "lost" && (
+          <div className="mainbox">
+            <h2>Sorry! You lost</h2>
+          </div>
+        )}
 
-              console.log(e);
-              let floatTemp = parseFloat(temp);
+        {won === "no" && (
+          <div className="mainbox">
+            Main area box
+            {/* {data} */}
+            <h2 className="city_name">{city.city_name}</h2>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
 
-              // if value is correct
-              console.log(99999, data, parseFloat(temp));
-              if (data <= floatTemp + 5 && data >= floatTemp - 5) {
-                return alert(`You guessed it The correct value is  ${data}`);
-              } else {
-                dispatch(
-                  setOldReadings([
-                    ...previousReadings,
-                    {
-                      temp,
-                      was: cityTemp,
-                    },
-                  ])
-                );
-              }
-            }}
-          >
-            <input
-              type="number"
-              id="input"
-              placeholder="Your guess text box"
-              value={temp}
-              onChange={(e) => {
-                setTemp(e.target.value);
+                console.log(e);
+                let floatTemp = parseFloat(temp);
+
+                // if value is correct
+                console.log(99999, data, parseFloat(temp));
+                if (data <= floatTemp + 5 && data >= floatTemp - 5) {
+                  setWon("won");
+                  return alert(`You guessed it The correct value is  ${data}`);
+                } else {
+                  dispatch(
+                    setOldReadings([
+                      ...previousReadings,
+                      {
+                        temp,
+                        was: cityTemp,
+                      },
+                    ])
+                  );
+                }
               }}
-            />
-            <br />
-            <button> Check </button>
-          </form>
-        </div>
+            >
+              <input
+                type="number"
+                id="input"
+                placeholder="Your guess text box"
+                value={temp}
+                onChange={(e) => {
+                  setTemp(e.target.value);
+                }}
+              />
+              <br />
+              <p>You have {attempts_left} attempts left</p>
+              <button> Check </button>
+            </form>
+          </div>
+        )}
       </div>
       <div className="footer">
         {previousReadings.map((reading) => {
