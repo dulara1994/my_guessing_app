@@ -1,4 +1,3 @@
-export const START_LOADING = 'START_LOADING';
-export const END_LOADING = 'END_LOADING';
-
-export const TEST = 'TEST';
+export const START_LOADING = "START_LOADING";
+export const END_LOADING = "END_LOADING";
+export const TEMPERATURE = "TEMPERATURE";

@@ -1,8 +1,9 @@
+/* eslint-disable import/no-anonymous-default-export */
 import { START_LOADING, END_LOADING, TEST } from "../constants/common-constant";
 
 const initialState = {
   loading: false,
-  testdata: 'initial data',
+  testdata: "initial data",
 };
 
 export default (state = initialState, action) => {

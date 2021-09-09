@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useEffect } from "react";
+import axios from "axios";
 
 const MainPageWrapper = styled.div`
   background-color: #d0e2f2;
@@ -20,7 +21,23 @@ const cities = [
 
 const MainLayout = () => {
   const selected_city = cities[Math.floor(Math.random() * cities.length)];
-  console.log(6666, selected_city);
+  const api_key = process.env.REACT_APP_WEATHER_API_KEY;
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://api.openweathermap.org/data/2.5/weather?q=${selected_city.city_id}&appid=${api_key}`
+      )
+      .then(function (response) {
+        // handle success
+
+        // if there is a response set it to the store
+
+        console.log(response);
+      });
+  }, []);
+
+  // fetch and store the value to the store
 
   return (
     <MainPageWrapper>

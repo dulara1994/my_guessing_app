@@ -1,4 +1,8 @@
-import { START_LOADING, END_LOADING, TEST } from "../constants/common-constant";
+import {
+  START_LOADING,
+  END_LOADING,
+  TEMPERATURE,
+} from "../constants/common-constant";
 
 export function startLoading(payload) {
   return {
@@ -7,9 +11,9 @@ export function startLoading(payload) {
   };
 }
 
-export function test(payload) {
+export function temperature(payload) {
   return {
-    type: TEST,
+    type: TEMPERATURE,
     payload,
   };
 }
